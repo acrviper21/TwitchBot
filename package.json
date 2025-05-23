@@ -1,0 +1,24 @@
+{
+  "name": "twitchbot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acrviper21/TwitchBot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/acrviper21/TwitchBot/issues"
+  },
+  "homepage": "https://github.com/acrviper21/TwitchBot#readme",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "tmi.js": "^1.8.5"
+  }
+}
