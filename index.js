@@ -1,3 +1,6 @@
+// Get load permissions
+const loadCommandPermissions = require("./loadCommandPermissions");
+
 //libary needed to connect to twitch
 const tmi = require("tmi.js");
 
@@ -21,4 +24,12 @@ client.on('join', (channel, username, self) => {
         console.log("Connected");
         client.say(channelName, "Hello Everyone").catch(console.error);
     }
+});
+
+loadCommandPermissions()
+.then((permissions) => {
+    console.log("Permissions loaded: ", permissions);
+})
+.catch((error) => {
+    console.error("Failed to load: ", error)
 });
