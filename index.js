@@ -1,5 +1,5 @@
 // Get load permissions
-const {loadCommandPermissions, loadSendMethods, loadBotCommands} = require("./loadCommandPermissions");
+const {loadCommandPermissions, loadSendMethods, loadBotCommands, loadMods} = require("./loadCommandPermissions");
 
 //libary needed to connect to twitch
 const tmi = require("tmi.js");
@@ -16,7 +16,28 @@ const client = new tmi.Client({
     channels: [process.env.CHANNEL_NAME]
 });
 
-client.connect();
+setupBot();
+
+async function setupBot()
+{
+    try 
+    {
+        const commandPermissions = await loadCommandPermissions();
+        const sendMethods = await loadSendMethods();
+        const botCommands = await loadBotCommands();
+        const mods = await loadMods();
+        // console.log("Permissions loaded: ", commandPermissions);
+        // console.log("sendMethods loaded: ", sendMethods);
+        // console.log("Bot Commands loaded: ", botCommands);
+        // console.log("Mods loaded: ", mods);
+        
+        client.connect();
+        
+    } catch (error) 
+    {
+        console.log("Error has occurred: ", error)
+    } 
+}
 
 client.on('join', (channel, username, self) => {
     if(self)
@@ -25,27 +46,3 @@ client.on('join', (channel, username, self) => {
         client.say(channelName, "Hello Everyone").catch(console.error);
     }
 });
-
-loadCommandPermissions()
-.then((permissions) => {
-    console.log("Permissions loaded: ", permissions);
-})
-.catch((error) => {
-    console.error("Failed to load: ", error)
-});
-
-loadSendMethods()
-.then((sendMethods) => {
-    console.log("sendMethods loaded: ", sendMethods);
-})
-.catch((error) =>{
-    console.error("Failed to load sendMethod, ", error);
-})
-
-loadBotCommands()
-.then((botCommands) => {
-    console.log("Bot Commands loaded: ", botCommands);
-})
-.catch((error) => {
-    console.error("Failed to load bot commands, ", error);
-})

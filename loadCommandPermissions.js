@@ -19,6 +19,9 @@ function loadCommandPermissions()
         // Called after the file is done being read
         .on("end", () =>{
             resolve(permissions);
+        })
+        .on("error", (err) => {
+            reject(err);
         });
     })
 }
@@ -31,10 +34,12 @@ function loadSendMethods()
         .on("data", row => {
             sendMethods.set(parseInt(row.id), row.messageType);
         })
-
         .on("end", () => {
             resolve(sendMethods);
         })
+        .on("error", (err) => {
+            reject(err);
+        });
     })
 }
 
@@ -55,8 +60,27 @@ function loadBotCommands()
         .on("end", () =>{
             resolve(botCommands);
         })
+        .on("error", (err) => {
+            reject(err);
+        });
     })
 }
 
-module.exports = {loadCommandPermissions, loadSendMethods, loadBotCommands};
+function loadMods()
+{
+    return new Promise((resolve, reject) =>
+    {
+        fs.readFile("mods.txt", "utf-8", (err, data) =>{
+            if(err)
+            {
+                reject(err);
+            }
+            else{
+                const mods = data.split("\n");
+                resolve(mods);
+            }
+        })
+    })
+}
+module.exports = {loadCommandPermissions, loadSendMethods, loadBotCommands, loadMods};
 
