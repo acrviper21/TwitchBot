@@ -1,8 +1,10 @@
 const fs = require("fs");
 const csv = require("csv-parser");
-const { resolve } = require("path");
+const { Console } = require("console");
 
 const permissions = new Map();
+const sendMethods = new Map();
+const botCommands = new Map();
 
 function loadCommandPermissions()
 {
@@ -16,30 +18,45 @@ function loadCommandPermissions()
         })
         // Called after the file is done being read
         .on("end", () =>{
-            console.log("Finished reading in the file");
-            for(const [key, value] of permissions)
-            {
-                console.log(`Key: ${key}, Value: ${value}`);
-            }
             resolve(permissions);
         });
     })
 }
 
-module.exports = loadCommandPermissions;
+function loadSendMethods()
+{
+    return new Promise((resolve, reject) => {
+        fs.createReadStream("sendMethods.csv")
+        .pipe(csv())
+        .on("data", row => {
+            sendMethods.set(parseInt(row.id), row.messageType);
+        })
 
-// //Create a stream to read in csv file
-// fs.createReadStream("commandPermissions.csv")
-// .pipe(csv())
-// // Get each row from the csv file
-// .on("data", (row) => {
-//     permissions.set(row.id, row.name);
-// })
-// // Called after the file is done being read
-// .on("end", () =>{
-//     console.log("Finished reading in the file");
-//     for(const [key, value] of permissions)
-//     {
-//         console.log(`Key: ${key}, Value: ${value}`);
-//     }
-// });
+        .on("end", () => {
+            resolve(sendMethods);
+        })
+    })
+}
+
+function loadBotCommands()
+{
+    return new Promise((resolve, reject) => {
+        fs.createReadStream("botCommands.csv")
+        .pipe(csv())
+        .on("data", row =>{
+            botCommands.set(row.command,
+                {
+                    reponse: row.response,
+                    permission: row.permission,
+                    sendMethod: row.sendMethod
+                }
+            )
+        })
+        .on("end", () =>{
+            resolve(botCommands);
+        })
+    })
+}
+
+module.exports = {loadCommandPermissions, loadSendMethods, loadBotCommands};
+

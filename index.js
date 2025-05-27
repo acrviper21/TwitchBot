@@ -1,5 +1,5 @@
 // Get load permissions
-const loadCommandPermissions = require("./loadCommandPermissions");
+const {loadCommandPermissions, loadSendMethods, loadBotCommands} = require("./loadCommandPermissions");
 
 //libary needed to connect to twitch
 const tmi = require("tmi.js");
@@ -33,3 +33,19 @@ loadCommandPermissions()
 .catch((error) => {
     console.error("Failed to load: ", error)
 });
+
+loadSendMethods()
+.then((sendMethods) => {
+    console.log("sendMethods loaded: ", sendMethods);
+})
+.catch((error) =>{
+    console.error("Failed to load sendMethod, ", error);
+})
+
+loadBotCommands()
+.then((botCommands) => {
+    console.log("Bot Commands loaded: ", botCommands);
+})
+.catch((error) => {
+    console.error("Failed to load bot commands, ", error);
+})
