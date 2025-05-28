@@ -51,7 +51,7 @@ function loadBotCommands()
         .on("data", row =>{
             botCommands.set(row.command,
                 {
-                    reponse: row.response,
+                    response: row.response,
                     permission: row.permission,
                     sendMethod: row.sendMethod
                 }
