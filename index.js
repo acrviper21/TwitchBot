@@ -32,7 +32,6 @@ async function setupBot()
         sendMethods = await loadSendMethods();
         botCommands = await loadBotCommands();
         mods = await loadMods();
-        console.log("Bot Commands loaded: ", botCommands);
         
         await client.connect();
         
@@ -45,7 +44,7 @@ async function setupBot()
 client.on('join', (channel, username, self) => {
     if(self)
     {
-        console.log("Connected");
+
         client.say(channelName, "Hello Everyone").catch(console.error);
     }
 });
