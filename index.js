@@ -74,7 +74,6 @@ client.on("message",(channel, tags, message, self) => {
             case 2:
                 if(!tags.mod && (!tags.badges || tags.badges.broadcaster != "1"))
                 {
-                    console.log(response.response);
                     return;
                 }
                     sendMessage(channel, response.response, parseInt(response.sendMethod));
